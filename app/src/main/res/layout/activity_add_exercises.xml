@@ -9,6 +9,7 @@
     tools:context=".AddExercises">
 
     <LinearLayout
+        android:id="@+id/list_exercises"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -38,7 +39,7 @@
             android:background="@drawable/form_background">
 
             <EditText
-                android:id="@+id/name"
+                android:id="@+id/name_1"
                 android:layout_width="310dp"
                 android:layout_height="40dp"
                 android:ems="10"
@@ -49,37 +50,36 @@
 
             <EditText
 
-                android:id="@+id/text_series"
+                android:id="@+id/text_series_1"
                 android:layout_width="100dp"
                 android:layout_height="40dp"
                 android:ems="10"
                 android:hint="Series"
                 android:inputType="number"
-                app:layout_constraintEnd_toStartOf="@id/text_reps"
+                app:layout_constraintEnd_toStartOf="@id/text_reps_1"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/name" />
+                app:layout_constraintTop_toBottomOf="@id/name_1" />
 
             <EditText
 
-                android:id="@+id/text_reps"
+                android:id="@+id/text_reps_1"
                 android:layout_width="157dp"
                 android:layout_height="40dp"
-
                 android:ems="10"
                 android:hint="Reps"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/text_series"
-                app:layout_constraintTop_toBottomOf="@id/name" />
+                app:layout_constraintStart_toEndOf="@id/text_series_1"
+                app:layout_constraintTop_toBottomOf="@id/name_1" />
 
             <RadioGroup
 
-                android:id="@+id/dayofweek"
+                android:id="@+id/dayofweek_1"
                 android:layout_width="wrap_content"
                 android:layout_height="25dp"
                 android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/text_series">
+                app:layout_constraintTop_toBottomOf="@id/text_series_1">
 
                 <RadioButton
                     android:id="@+id/monday"
@@ -137,475 +137,16 @@
             </RadioGroup>
 
             <EditText
-                android:id="@+id/notes"
+                android:id="@+id/notes_1"
                 android:layout_width="310dp"
                 android:layout_height="40dp"
                 android:ems="10"
                 android:hint="Notes"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/dayofweek" />
+                app:layout_constraintTop_toBottomOf="@id/dayofweek_1" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-        <androidx.constraintlayout.widget.ConstraintLayout
-            style="@style/input_form"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/form_background">
 
-            <EditText
-                android:id="@+id/name"
-                android:layout_width="310dp"
-                android:layout_height="40dp"
-                android:ems="10"
-                android:hint="Name of Excercise"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <EditText
-
-                android:id="@+id/text_series"
-                android:layout_width="100dp"
-                android:layout_height="40dp"
-                android:ems="10"
-                android:hint="Series"
-                android:inputType="number"
-                app:layout_constraintEnd_toStartOf="@id/text_reps"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/name" />
-
-            <EditText
-
-                android:id="@+id/text_reps"
-                android:layout_width="157dp"
-                android:layout_height="40dp"
-
-                android:ems="10"
-                android:hint="Reps"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/text_series"
-                app:layout_constraintTop_toBottomOf="@id/name" />
-
-            <RadioGroup
-
-                android:id="@+id/dayofweek"
-                android:layout_width="wrap_content"
-                android:layout_height="25dp"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/text_series">
-
-                <RadioButton
-                    android:id="@+id/monday"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:text="Mo"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <RadioButton
-                    android:id="@+id/tueday"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:text="Tu"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <RadioButton
-                    android:id="@+id/wedndays"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:text="We"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <RadioButton
-                    android:id="@+id/thurday"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:text="Th"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <RadioButton
-                    android:id="@+id/friday"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:text="Fr"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <RadioButton
-                    android:id="@+id/saturday"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:text="Sa"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </RadioGroup>
-
-            <EditText
-                android:id="@+id/notes"
-                android:layout_width="310dp"
-                android:layout_height="40dp"
-                android:ems="10"
-                android:hint="Notes"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/dayofweek" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-        <androidx.constraintlayout.widget.ConstraintLayout
-            style="@style/input_form"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/form_background">
-
-            <EditText
-                android:id="@+id/name"
-                android:layout_width="310dp"
-                android:layout_height="40dp"
-                android:ems="10"
-                android:hint="Name of Excercise"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <EditText
-
-                android:id="@+id/text_series"
-                android:layout_width="100dp"
-                android:layout_height="40dp"
-                android:ems="10"
-                android:hint="Series"
-                android:inputType="number"
-                app:layout_constraintEnd_toStartOf="@id/text_reps"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/name" />
-
-            <EditText
-
-                android:id="@+id/text_reps"
-                android:layout_width="157dp"
-                android:layout_height="40dp"
-
-                android:ems="10"
-                android:hint="Reps"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/text_series"
-                app:layout_constraintTop_toBottomOf="@id/name" />
-
-            <RadioGroup
-
-                android:id="@+id/dayofweek"
-                android:layout_width="wrap_content"
-                android:layout_height="25dp"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/text_series">
-
-                <RadioButton
-                    android:id="@+id/monday"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:text="Mo"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <RadioButton
-                    android:id="@+id/tueday"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:text="Tu"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <RadioButton
-                    android:id="@+id/wedndays"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:text="We"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <RadioButton
-                    android:id="@+id/thurday"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:text="Th"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <RadioButton
-                    android:id="@+id/friday"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:text="Fr"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <RadioButton
-                    android:id="@+id/saturday"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:text="Sa"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </RadioGroup>
-
-            <EditText
-                android:id="@+id/notes"
-                android:layout_width="310dp"
-                android:layout_height="40dp"
-                android:ems="10"
-                android:hint="Notes"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/dayofweek" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-        <androidx.constraintlayout.widget.ConstraintLayout
-            style="@style/input_form"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/form_background">
-
-            <EditText
-                android:id="@+id/name"
-                android:layout_width="310dp"
-                android:layout_height="40dp"
-                android:ems="10"
-                android:hint="Name of Excercise"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <EditText
-
-                android:id="@+id/text_series"
-                android:layout_width="100dp"
-                android:layout_height="40dp"
-                android:ems="10"
-                android:hint="Series"
-                android:inputType="number"
-                app:layout_constraintEnd_toStartOf="@id/text_reps"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/name" />
-
-            <EditText
-
-                android:id="@+id/text_reps"
-                android:layout_width="157dp"
-                android:layout_height="40dp"
-
-                android:ems="10"
-                android:hint="Reps"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/text_series"
-                app:layout_constraintTop_toBottomOf="@id/name" />
-
-            <RadioGroup
-
-                android:id="@+id/dayofweek"
-                android:layout_width="wrap_content"
-                android:layout_height="25dp"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/text_series">
-
-                <RadioButton
-                    android:id="@+id/monday"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:text="Mo"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <RadioButton
-                    android:id="@+id/tueday"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:text="Tu"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <RadioButton
-                    android:id="@+id/wedndays"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:text="We"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <RadioButton
-                    android:id="@+id/thurday"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:text="Th"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <RadioButton
-                    android:id="@+id/friday"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:text="Fr"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <RadioButton
-                    android:id="@+id/saturday"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:text="Sa"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </RadioGroup>
-
-            <EditText
-                android:id="@+id/notes"
-                android:layout_width="310dp"
-                android:layout_height="40dp"
-                android:ems="10"
-                android:hint="Notes"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/dayofweek" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-        <androidx.constraintlayout.widget.ConstraintLayout
-            style="@style/input_form"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/form_background">
-
-            <EditText
-                android:id="@+id/name"
-                android:layout_width="310dp"
-                android:layout_height="40dp"
-                android:ems="10"
-                android:hint="Name of Excercise"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <EditText
-
-                android:id="@+id/text_series"
-                android:layout_width="100dp"
-                android:layout_height="40dp"
-                android:ems="10"
-                android:hint="Series"
-                android:inputType="number"
-                app:layout_constraintEnd_toStartOf="@id/text_reps"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/name" />
-
-            <EditText
-
-                android:id="@+id/text_reps"
-                android:layout_width="157dp"
-                android:layout_height="40dp"
-
-                android:ems="10"
-                android:hint="Reps"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/text_series"
-                app:layout_constraintTop_toBottomOf="@id/name" />
-
-            <RadioGroup
-
-                android:id="@+id/dayofweek"
-                android:layout_width="wrap_content"
-                android:layout_height="25dp"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/text_series">
-
-                <RadioButton
-                    android:id="@+id/monday"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:text="Mo"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <RadioButton
-                    android:id="@+id/tueday"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:text="Tu"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <RadioButton
-                    android:id="@+id/wedndays"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:text="We"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <RadioButton
-                    android:id="@+id/thurday"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:text="Th"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <RadioButton
-                    android:id="@+id/friday"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:text="Fr"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <RadioButton
-                    android:id="@+id/saturday"
-                    android:layout_width="wrap_content"
-                    android:layout_height="20dp"
-                    android:text="Sa"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </RadioGroup>
-
-            <EditText
-                android:id="@+id/notes"
-                android:layout_width="310dp"
-                android:layout_height="40dp"
-                android:ems="10"
-                android:hint="Notes"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/dayofweek" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <Button
             android:id="@+id/button"
