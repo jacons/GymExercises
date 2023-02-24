@@ -17,6 +17,7 @@ public class Excercise {
         this.reps = reps;
         this.note = Note;
         this.day = day;
+
     }
 
 }
