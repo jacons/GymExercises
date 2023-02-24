@@ -7,80 +7,71 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DBHandler extends SQLiteOpenHelper {
 
-    private static final String DB_NAME = "gymexercises_db"; // db name
-    private static final int DB_VERSION = 1;
-    private static final String TABLE_NAME = "exercises";
-
-    private static final String ID_COL = "id";
-
-    // below variable is for our course name column
-    private static final String NAME_COL = "name";
-
-    // below variable id for our course duration column.
-    private static final String DURATION_COL = "duration";
-
-    // below variable for our course description column.
-    private static final String DESCRIPTION_COL = "description";
-
-    // below variable is for our course tracks column.
-    private static final String TRACKS_COL = "tracks";
 
     // creating a constructor for our database handler.
     public DBHandler(Context context) {
-        super(context, DB_NAME, null, DB_VERSION);
+        super(context, "gymexercises_db", null, Integer.parseInt("1"));
     }
 
     // below method is for creating a database by running a sqlite query
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // on below line we are creating
-        // an sqlite query and we are
-        // setting our column names
-        // along with their data types.
-        String query = "CREATE TABLE " + TABLE_NAME + " ("
-                + ID_COL + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + NAME_COL + " TEXT,"
-                + DURATION_COL + " TEXT,"
-                + DESCRIPTION_COL + " TEXT,"
-                + TRACKS_COL + " TEXT)";
+        // on below line we are creating an sqlite query and we are
+        // setting our column names along with their data types.
+        String workouts = " CREATE TABLE workouts (" +
+                            "id_program TINYINT  PRIMARY KEY AUTOINCREMENT," +
+                            "name VARCHAR(50) NOT NULL ," +
+                            "date TIMESTAMP  NOT NULL DEFAULT CURRENT_TIMESTAMP);";
 
-        // at last we are calling a exec sql
-        // method to execute above sql query
-        db.execSQL(query);
+        String exercises = " CREATE TABLE exercises (" +
+                            "id_program TINYINT PRIMARY KEY," +
+                            "id_exercise TINYINT PRIMARY KEY ," +
+                            "name VARCHAR(100) NOT NULL ," +
+                            "reps TINYINT NOT NULL ," +
+                            "notes TEXT NOT NULL ," +
+                            "day TINYINT NOT NULL);";
+
+        // at last we are calling a exec sql method to execute above sql query
+        db.execSQL(workouts);
+        db.execSQL(exercises);
+
     }
 
     // this method is use to add new course to our sqlite database.
-    public void addNewCourse(String courseName, String courseDuration, String courseDescription, String courseTracks) {
+    public void addNewWorkout(Workout w) {
 
-        // on below line we are creating a variable for
-        // our sqlite database and calling writable method
-        // as we are writing data in our database.
+        // on below line we are creating a variable for  our sqlite database and calling
+        // writable method as we are writing data in our database.
         SQLiteDatabase db = this.getWritableDatabase();
 
-        // on below line we are creating a
-        // variable for content values.
+        // on below line we are creating a variable for content values.
         ContentValues values = new ContentValues();
+        values.put("name",w.name);
+        long id_workout = db.insert("workouts", null, values);
 
-        // on below line we are passing all values
-        // along with its key and value pair.
-        values.put(NAME_COL, courseName);
-        values.put(DURATION_COL, courseDuration);
-        values.put(DESCRIPTION_COL, courseDescription);
-        values.put(TRACKS_COL, courseTracks);
+        values.clear();
 
-        // after adding all values we are passing
-        // content values to our table.
-        db.insert(TABLE_NAME, null, values);
+        int id_exercise = 0;
+        for (Excercise e : w.exercies) {
 
-        // at last we are closing our
-        // database after adding database.
+            values.put("id_program",id_workout);
+            values.put("id_exercise",id_exercise++);
+            values.put("name",e.name);
+            values.put("reps",e.reps);
+            values.put("notes",e.note);
+            values.put("day",e.day);
+
+            db.insert("exercises", null, values);
+        }
+
         db.close();
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // this method is called to check if the table exists already.
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS workouts");
+        db.execSQL("DROP TABLE IF EXISTS exercises");
         onCreate(db);
     }
 }
