@@ -13,23 +13,93 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class AddExercises extends AppCompatActivity implements View.OnClickListener {
 
 
-    public ArrayList<wrapper_form> exercies;
+    public ArrayList<Exercise> exercies;
     public LinearLayout list_excercises;
 
-    public int dpToPx(int dp) {
-        DisplayMetrics displayMetrics = this.getResources().getDisplayMetrics();
-        return Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+    private DBHandler dbHandler;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_add_exercises);
+
+        exercies = new ArrayList<>();
+        this.list_excercises = findViewById(R.id.list_exercises);
+
+        this.dbHandler = new DBHandler(this);
+
+        Button addExercise = findViewById(R.id.add_exercise);
+        addExercise.setOnClickListener(this);
+
+        Button save_workout = findViewById(R.id.save_workout);
+        save_workout.setOnClickListener(this);
+
     }
 
-    public wrapper_form add_form(LinearLayout parent) {
+    @Override
+    public void onClick(View view) {
+        int id = view.getId();
+
+        if (id == R.id.add_exercise) {
+            exercies.add(add_form(this.list_excercises));
+        }
+        if (id == R.id.save_workout) {
+            this.save_workout();
+        }
+    }
+
+    public void save_workout() {
+
+        String workout_name, name, series, reps, day, notes;
+
+        // Retrieve a workout_name
+        workout_name = ((EditText) findViewById(R.id.workout_name)).getText().toString().trim();
+
+        // Check first of all if there is another workout with the same name
+        if (dbHandler.checkWorkoutExist(workout_name)) {
+            Toast.makeText(getApplicationContext(), workout_name + " already exist!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // workout object used to db updates
+        Workout workout = new Workout(workout_name);
+
+        // we want to avoid dupliace name's exercises, so we check before to save on db
+        HashSet<String> duplicate = new HashSet<>();
+        // We retrieve the fields and check if they are null
+        for (Exercise w : this.exercies) {
+
+            name = w.getName_ex();
+            series = w.getSeries();
+            reps = w.getReps();
+            day = String.valueOf(w.getDay());
+            notes = w.getNotes();
+
+            // All field must contains a value, and duplicate are ignored
+            if (!name.equals("") & !series.equals("") & !reps.equals("") & !day.equals("")
+                    & !notes.equals("") & !duplicate.contains(name)) {
+
+                workout.add(w);
+                duplicate.add(name);
+            }
+        }
+
+        dbHandler.addNewWorkout(workout);
+    }
+
+    public Exercise add_form(LinearLayout parent) {
         // definizione del LinearLayout principale
         LinearLayout form = new LinearLayout(this);
 
@@ -43,7 +113,7 @@ public class AddExercises extends AppCompatActivity implements View.OnClickListe
         EditText name_ex = new EditText(this);
         name_ex.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, dpToPx(40)));
         name_ex.setHint("Name of Exercise");
-
+        name_ex.setText("A");
         form.addView(name_ex);
 
         LinearLayout ll_SeriesReps = new LinearLayout(this);
@@ -56,11 +126,12 @@ public class AddExercises extends AppCompatActivity implements View.OnClickListe
         series.setLayoutParams(params);
         series.setInputType(+InputType.TYPE_CLASS_NUMBER);
         series.setHint("Series");
+        series.setText("2");
 
-        // definizione dell'EditText per le ripetizioni
         EditText reps = new EditText(this);
         reps.setLayoutParams(new LinearLayout.LayoutParams(0, dpToPx(40), 2f));
         reps.setHint("Reps");
+        reps.setText("C");
 
         ll_SeriesReps.addView(series);
         ll_SeriesReps.addView(reps);
@@ -74,60 +145,28 @@ public class AddExercises extends AppCompatActivity implements View.OnClickListe
         int idx = 0;
         for (String d : new String[]{"Mo", "Tu", "We", "Th", "Fr", "Sa"}) {
             RadioButton radio = new RadioButton(this);
+            if (idx == 0) radio.toggle();
             radio.setId(idx++);
             radio.setText(d);
             radio.setTextSize(13);
             radioDays.addView(radio);
+
         }
         form.addView(radioDays);
 
         EditText notes = new EditText(this);
         notes.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, dpToPx(40)));
-        notes.setHint("Name of Excercise");
+        notes.setHint("Notes");
+        notes.setText("D");
         form.addView(notes);
 
         parent.addView(form);
-        return new wrapper_form(name_ex, series, reps, radioDays, notes);
+        return new Exercise(name_ex, series, reps, radioDays, notes);
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_exercises);
-
-        exercies = new ArrayList<>();
-        this.list_excercises = findViewById(R.id.list_exercises);
-
-        Button addExercise = findViewById(R.id.add_exercise);
-        addExercise.setOnClickListener(this);
-
-        Button save_workout = findViewById(R.id.save_workout);
-        save_workout.setOnClickListener(this);
-
+    public int dpToPx(int dp) {
+        DisplayMetrics displayMetrics = this.getResources().getDisplayMetrics();
+        return Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
     }
 
-    @Override
-    public void onClick(View view) {
-
-        switch (view.getId()) {
-            case R.id.add_exercise:
-                exercies.add(add_form(this.list_excercises));
-                return;
-            case R.id.save_workout:
-                this.save_workout();
-                return;
-        }
-    }
-
-    public void save_workout() {
-        for (wrapper_form w : this.exercies) {
-            System.out.println("Name " + w.name_ex.getText().toString());
-            System.out.println("Series " + w.series.getText().toString());
-            System.out.println("Reps " + w.reps.getText().toString());
-            System.out.println("Day " + w.radioDays.getCheckedRadioButtonId());
-            System.out.println("Notes " + w.notes.getText().toString());
-
-        }
-    }
 }

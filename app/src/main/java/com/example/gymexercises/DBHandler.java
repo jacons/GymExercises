@@ -2,6 +2,7 @@ package com.example.gymexercises;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -19,22 +20,39 @@ public class DBHandler extends SQLiteOpenHelper {
         // on below line we are creating an sqlite query and we are
         // setting our column names along with their data types.
         String workouts = " CREATE TABLE workouts (" +
-                            "id_program TINYINT  PRIMARY KEY AUTOINCREMENT," +
-                            "name VARCHAR(50) NOT NULL ," +
-                            "date TIMESTAMP  NOT NULL DEFAULT CURRENT_TIMESTAMP);";
+                "id_program INTEGER  PRIMARY KEY AUTOINCREMENT," +
+                "name VARCHAR(50) NOT NULL ," +
+                "date TIMESTAMP  NOT NULL DEFAULT CURRENT_TIMESTAMP);";
 
         String exercises = " CREATE TABLE exercises (" +
-                            "id_program TINYINT PRIMARY KEY," +
-                            "id_exercise TINYINT PRIMARY KEY ," +
-                            "name VARCHAR(100) NOT NULL ," +
-                            "reps TINYINT NOT NULL ," +
-                            "notes TEXT NOT NULL ," +
-                            "day TINYINT NOT NULL);";
+                "id_program INTEGER," +
+                "id_exercise INTEGER," +
+                "name VARCHAR(100) NOT NULL ," +
+                "reps INTEGER NOT NULL ," +
+                "notes TEXT NOT NULL ," +
+                "day INTEGER NOT NULL," +
+                "PRIMARY KEY (id_program, id_exercise));";
 
         // at last we are calling a exec sql method to execute above sql query
         db.execSQL(workouts);
         db.execSQL(exercises);
 
+    }
+
+    public boolean checkWorkoutExist(String workout_name) {
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT COUNT(*) FROM workouts WHERE name == ?;", new String[]{workout_name});
+
+        boolean flag = false;
+        if (c.moveToFirst()) do {
+            flag = c.getInt(0) > 0;
+        } while (c.moveToNext());
+
+        c.close();
+        db.close();
+
+        return flag;
     }
 
     // this method is use to add new course to our sqlite database.
@@ -52,14 +70,14 @@ public class DBHandler extends SQLiteOpenHelper {
         values.clear();
 
         int id_exercise = 0;
-        for (Excercise e : w.exercies) {
+        for (Exercise e : w.exercies) {
 
-            values.put("id_program",id_workout);
-            values.put("id_exercise",id_exercise++);
-            values.put("name",e.name);
-            values.put("reps",e.reps);
-            values.put("notes",e.note);
-            values.put("day",e.day);
+            values.put("id_program", id_workout);
+            values.put("id_exercise", id_exercise++);
+            values.put("name", e.getName_ex());
+            values.put("reps", e.getReps());
+            values.put("notes", e.getNotes());
+            values.put("day", e.getDay());
 
             db.insert("exercises", null, values);
         }

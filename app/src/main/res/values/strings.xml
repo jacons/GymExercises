@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">GymExercises</string>
+    <string name="add_workout">Add Workout</string>
+    <string name="remove_exercises">Remove Exercises</string>
 </resources>
