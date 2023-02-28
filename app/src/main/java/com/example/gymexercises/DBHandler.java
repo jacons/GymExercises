@@ -1,6 +1,5 @@
 package com.example.gymexercises;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -57,7 +56,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     // this method is use to add new course to our sqlite database.
     public void addNewWorkout(Workout w) {
-
+        /*
         // on below line we are creating a variable for  our sqlite database and calling
         // writable method as we are writing data in our database.
         SQLiteDatabase db = this.getWritableDatabase();
@@ -83,6 +82,8 @@ public class DBHandler extends SQLiteOpenHelper {
         }
 
         db.close();
+
+         */
     }
 
     @Override
