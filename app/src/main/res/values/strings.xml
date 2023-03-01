@@ -1,5 +1,17 @@
 <resources>
     <string name="app_name">GymExercises</string>
     <string name="add_workout">Add Workout</string>
-    <string name="remove_exercises">Remove Exercises</string>
+    <string name="remove_exercises">Remove Workout</string>
+    <string name="add_workout_program">Add Workout program</string>
+    <string name="name_of_workout">Name of workout</string>
+    <string name="save">Save</string>
+    <string name="add_exercise">Add exercise</string>
+    <string name="number_of_cycles">Number of Cycles</string>
+    <string name="default_cycle">2</string>
+    <string name="default_name">Workout</string>
+    <string name="micro_cycles_weeks">Microcycles</string>
+    <string name="week">Week</string>
+    <string name="time">Time</string>
+    <string name="series">Series</string>
+    <string name="reps">Reps</string>
 </resources>

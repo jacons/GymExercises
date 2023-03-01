@@ -1,19 +1,23 @@
 package com.example.gymexercises;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class Workout {
+public class Workout<T> {
 
-    public List<Exercise> exercies;
+    public ArrayList<T> exercises;
     public final String name;
+    public String date;
 
     public Workout(String name) {
         this.name = name;
-        this.exercies = new ArrayList<>();
+        this.exercises = new ArrayList<>();
     }
 
-    public void add(Exercise e) {
-        this.exercies.add(e);
+    public void addDate(String date) {
+        this.date = date;
+    }
+
+    public void add(T e) {
+        this.exercises.add(e);
     }
 }

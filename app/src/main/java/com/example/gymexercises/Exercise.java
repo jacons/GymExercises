@@ -9,31 +9,25 @@ import java.util.ArrayList;
 
 public class Exercise {
 
-    private final EditText name_ex;
-    private final ArrayList<EditText[]> list_mcycles;
-    private final EditText time;
+    private final EditText name_ex, notes, time;
+    private final ArrayList<EditText[]> list_m_cycles;
     private final RadioGroup radioDays;
-    private final EditText notes;
     private ArrayList<String[]> cache = null;
 
-    public Exercise(EditText name_ex, ArrayList<EditText[]> list_mcycles, RadioGroup radioDays, EditText time, EditText notes) {
+    public Exercise(EditText name_ex, ArrayList<EditText[]> list_m_cycles, RadioGroup radioDays, EditText time, EditText notes) {
         this.name_ex = name_ex;
-        this.list_mcycles = list_mcycles;
+        this.list_m_cycles = list_m_cycles;
         this.radioDays = radioDays;
         this.notes = notes;
         this.time = time;
-    }
-
-    public String getName_ex() {
-        return name_ex.getText().toString().trim();
     }
 
     public ArrayList<String[]> getMCycles() {
 
         if (this.cache == null) {
 
-            ArrayList<String[]> result = new ArrayList<>(this.list_mcycles.size());
-            for (EditText[] cycle : this.list_mcycles) {
+            ArrayList<String[]> result = new ArrayList<>(this.list_m_cycles.size());
+            for (EditText[] cycle : this.list_m_cycles) {
                 result.add(new String[]{
                         cycle[0].getText().toString().trim(),
                         cycle[1].getText().toString().trim()
@@ -45,16 +39,20 @@ public class Exercise {
         return this.cache;
     }
 
+    public String getName() {
+        return name_ex.getText().toString().trim();
+    }
+
+    public String getNotes() {
+        return notes.getText().toString().trim();
+    }
+
     public int getDay() {
         return radioDays.getCheckedRadioButtonId();
     }
 
     public String getTime() {
         return time.getText().toString().trim();
-    }
-
-    public String getNotes() {
-        return notes.getText().toString().trim();
     }
 
 

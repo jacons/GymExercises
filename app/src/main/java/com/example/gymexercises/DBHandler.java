@@ -49,24 +49,25 @@ public class DBHandler extends SQLiteOpenHelper {
 
     }
 
-    public boolean checkWorkoutExist(String workout_name) {
+    public Boolean checkWorkoutExist(String workout_name) {
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor c = db.rawQuery("SELECT COUNT(*) FROM workouts WHERE name == ?;", new String[]{workout_name});
+        boolean flag;
+        try (Cursor c = db.rawQuery("SELECT COUNT(*) FROM workouts WHERE name == ?;", new String[]{workout_name})) {
+            flag = false;
+            if (c.moveToFirst()) do {
+                flag = c.getInt(0) > 0;
+            } while (c.moveToNext());
+        } catch (Exception e) {
+            return null;
+        }
 
-        boolean flag = false;
-        if (c.moveToFirst()) do {
-            flag = c.getInt(0) > 0;
-        } while (c.moveToNext());
-
-        c.close();
         db.close();
-
         return flag;
     }
 
     // this method is use to add new course to our sqlite database.
-    public void addNewWorkout(Workout w) {
+    public void addNewWorkout(Workout<Exercise> w) {
 
         // on below line we are creating a variable for  our sqlite database and calling
         // writable method as we are writing data in our database.
@@ -74,42 +75,103 @@ public class DBHandler extends SQLiteOpenHelper {
 
         // on below line we are creating a variable for content values.
         ContentValues values = new ContentValues();
-        values.put("name",w.name);
+        values.put("name", w.name);
         long id_workout = db.insert("workouts", null, values);
 
 
         int id_exercise = 0, id_cycle;
-        for (Exercise e : w.exercies) {
+        for (Exercise e : w.exercises) {
 
-            // Adding excercise
+            // Adding exercise
             values.clear();
             values.put("id_program", id_workout);
             values.put("id_exercise", id_exercise);
-            values.put("name", e.getName_ex());
+            values.put("name", e.getName());
             values.put("day", e.getDay());
             values.put("time", e.getTime());
             values.put("notes", e.getNotes());
             db.insert("exercises", null, values);
 
-            // For each excercise adding a cycle
+            // For each exercise adding a cycle
             id_cycle = 0;
-            values.clear();
             for (String[] cycle : e.getMCycles()) {
-
+                values.clear();
                 values.put("id_program", id_workout);
                 values.put("id_exercise", id_exercise);
                 values.put("week", id_cycle++);
                 values.put("series", cycle[0]);
                 values.put("reps", cycle[1]);
                 values.put("load", "");
-
+                db.insert("mcycles", null, values);
             }
-            db.insert("mcycles", null, values);
             id_exercise++;
         }
 
         db.close();
 
+    }
+
+    public Workout<wrapper_exercise> get_last_workout() {
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String id_program = "", name = "", date = "", time, notes, reps, load;
+        int day, series, id_exercise;
+
+        String sql_query = "SELECT id_program,name,date FROM workouts ORDER BY id_program DESC LIMIT 1";
+        try (Cursor c = db.rawQuery(sql_query, null)) {
+
+            if (c.moveToFirst()) do {
+                id_program = String.valueOf(c.getInt(0));
+                name = c.getString(1);
+                date = c.getString(2);
+
+            } while (c.moveToNext());
+        } catch (Exception e) {
+            return null;
+        }
+
+        Workout<wrapper_exercise> workout = new Workout<>(name);
+        workout.addDate(date);
+
+        sql_query = "SELECT name,day,time,notes FROM exercises WHERE id_program == ? ORDER BY id_exercise ASC";
+        try (Cursor c = db.rawQuery(sql_query, new String[]{id_program})) {
+
+            if (c.moveToFirst()) do {
+
+                name = c.getString(0);
+                day = c.getInt(1);
+                time = c.getString(2);
+                notes = c.getString(3);
+
+                workout.add(new wrapper_exercise(name, notes, day, time));
+
+            } while (c.moveToNext());
+        } catch (Exception e) {
+            return null;
+        }
+
+
+        sql_query = "SELECT id_exercise, series, reps, load FROM mcycles WHERE id_program == ? ORDER BY id_exercise, week ASC";
+        try (Cursor c = db.rawQuery(sql_query, new String[]{id_program})) {
+
+            if (c.moveToFirst()) do {
+
+                id_exercise = c.getInt(0);
+                series = c.getInt(1);
+                reps = c.getString(2);
+                load = c.getString(3);
+
+                workout.exercises.get(id_exercise).add_cycle(series, reps, load);
+
+            } while (c.moveToNext());
+        } catch (Exception e) {
+            return null;
+        }
+
+
+        db.close();
+        return workout;
     }
 
     @Override

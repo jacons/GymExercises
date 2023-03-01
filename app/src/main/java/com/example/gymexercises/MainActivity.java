@@ -7,16 +7,32 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 
 public class MainActivity extends AppCompatActivity {
+
+    Workout<wrapper_exercise> workout;
+    DBHandler dbHandler;
+    Adapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        DBHandler dbHandler = new DBHandler(this);
+        dbHandler = new DBHandler(this);
+
+        workout = dbHandler.get_last_workout();
+        adapter = new Adapter(this, workout.exercises, 4);
+
+        RecyclerView rv = findViewById(R.id.recyclerview);
+        rv.setAdapter(adapter);
+        rv.setLayoutManager(new LinearLayoutManager(this));
+
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -25,11 +41,10 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    public boolean onOptionsItemSelected(MenuItem item){
-        switch(item.getItemId()){
-            case R.id.add:
-                startActivity(new Intent(MainActivity.this, AddExercises.class));
-                return true;
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.add) {
+            startActivity(new Intent(MainActivity.this, AddExercises.class));
+            return true;
         }
         return false;
     }

@@ -2,11 +2,11 @@ package com.example.gymexercises;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+import static com.example.gymexercises.Utils.dpToPx;
 
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -24,9 +24,9 @@ import java.util.ArrayList;
 public class AddExercises extends AppCompatActivity implements View.OnClickListener {
 
 
-    private ArrayList<Exercise> exercies;
-    private LinearLayout list_excercises;
-    private EditText mcycles;
+    private ArrayList<Exercise> exercises;
+    private LinearLayout ll_exercises;
+    private EditText m_cycles;
     private DBHandler dbHandler;
 
 
@@ -36,8 +36,8 @@ public class AddExercises extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_exercises);
 
-        this.list_excercises = findViewById(R.id.list_exercises);
-        this.mcycles = findViewById(R.id.microcycles);
+        this.ll_exercises = findViewById(R.id.list_exercises);
+        this.m_cycles = findViewById(R.id.micro_cycles);
 
         Button addExercise = findViewById(R.id.add_exercise);
         addExercise.setOnClickListener(this);
@@ -46,10 +46,10 @@ public class AddExercises extends AppCompatActivity implements View.OnClickListe
         save_workout.setOnClickListener(this);
 
 
-        this.exercies = new ArrayList<>();
+        this.exercises = new ArrayList<>();
         this.dbHandler = new DBHandler(this);
 
-        this.exercies.add(add_form(this.list_excercises));
+        this.exercises.add(add_form(this.ll_exercises));
 
     }
 
@@ -58,7 +58,7 @@ public class AddExercises extends AppCompatActivity implements View.OnClickListe
         int id = view.getId();
 
         if (id == R.id.add_exercise) {
-            this.exercies.add(add_form(this.list_excercises));
+            this.exercises.add(add_form(this.ll_exercises));
         }
         if (id == R.id.save_workout) {
             this.save_workout();
@@ -78,53 +78,53 @@ public class AddExercises extends AppCompatActivity implements View.OnClickListe
         }
 
         // workout object used to db updates
-        Workout workout = new Workout(workout_name);
+        Workout<Exercise> workout = new Workout<>(workout_name);
 
         // We retrieve the fields and check if they are null
-        for (Exercise w : this.exercies) {
+        for (Exercise w : this.exercises) {
 
-            name = w.getName_ex();
+            name = w.getName();
             day = String.valueOf(w.getDay());
             notes = w.getNotes();
 
             for (String[] cycle : w.getMCycles()) {
                 if (cycle[0].equals("") | cycle[1].equals("")) {
-                    Toast.makeText(getApplicationContext(), "You must complete all informations! (Microcycles)", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "You must complete all information! (Micro-cycles)", Toast.LENGTH_SHORT).show();
                     return;
                 }
             }
             if (name.equals("") | day.equals("") | notes.equals("")) {
-                Toast.makeText(getApplicationContext(), "You must complete all informations! (Excercise)", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "You must complete all information! (Exercise)", Toast.LENGTH_SHORT).show();
                 return;
             }
             workout.add(w);
         }
-        if (workout.exercies.size() < 1) {
+        if (workout.exercises.size() < 1) {
             Toast.makeText(getApplicationContext(), "Add at least one exercise", Toast.LENGTH_SHORT).show();
             return;
         }
         dbHandler.addNewWorkout(workout);
+        //finish();
     }
 
     public Exercise add_form(LinearLayout parent) {
 
-        String tmp = this.mcycles.getText().toString();
+        String tmp = this.m_cycles.getText().toString();
         int n_cycles = tmp.equals("") ? 1 : Integer.parseInt(tmp);
 
-        this.mcycles.setEnabled(false);
+        this.m_cycles.setEnabled(false);
 
-        // definizione del LinearLayout principale
         LinearLayout form = new LinearLayout(this);
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT);
-        form.setPadding(dpToPx(5), dpToPx(5), dpToPx(5), dpToPx(5));
-        params.setMargins(0, dpToPx(10), 0, 0);
+        form.setPadding(dpToPx(this, 5), dpToPx(this, 5), dpToPx(this, 5), dpToPx(this, 5));
+        params.setMargins(0, dpToPx(this, 10), 0, 0);
         form.setLayoutParams(params);
         form.setBackgroundResource(R.drawable.form_background);
         form.setOrientation(LinearLayout.VERTICAL);
 
         EditText name_ex = new EditText(this);
-        name_ex.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, dpToPx(36)));
+        name_ex.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, dpToPx(this, 36)));
         name_ex.setHint("Name of Exercise");
         name_ex.setTextSize(15);
         name_ex.setText("A");
@@ -132,7 +132,7 @@ public class AddExercises extends AppCompatActivity implements View.OnClickListe
 
         TextView cycles = new TextView(this);
         cycles.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT));
-        cycles.setText("Microcycles");
+        cycles.setText(R.string.micro_cycles_weeks);
         form.addView(cycles);
 
         ArrayList<EditText[]> list_cycles = new ArrayList<>(n_cycles);
@@ -149,9 +149,8 @@ public class AddExercises extends AppCompatActivity implements View.OnClickListe
             num.setTextColor(Color.BLACK);
             num.setGravity(Gravity.CENTER);
 
-            // definizione dell'EditText per le serie
             EditText series = new EditText(this);
-            params = new LinearLayout.LayoutParams(0, dpToPx(36), 1f);
+            params = new LinearLayout.LayoutParams(0, dpToPx(this, 36), 1f);
             series.setLayoutParams(params);
             series.setInputType(+InputType.TYPE_CLASS_NUMBER);
             series.setHint("Series");
@@ -160,7 +159,7 @@ public class AddExercises extends AppCompatActivity implements View.OnClickListe
             series.setGravity(Gravity.CENTER);
 
             EditText reps = new EditText(this);
-            reps.setLayoutParams(new LinearLayout.LayoutParams(0, dpToPx(36), 1f));
+            reps.setLayoutParams(new LinearLayout.LayoutParams(0, dpToPx(this, 36), 1f));
             reps.setHint("Reps");
             reps.setTextSize(15);
             reps.setGravity(Gravity.CENTER);
@@ -181,11 +180,11 @@ public class AddExercises extends AppCompatActivity implements View.OnClickListe
 
         TextView time_tv = new TextView(this);
         time_tv.setLayoutParams(new LinearLayout.LayoutParams(0, WRAP_CONTENT, 1f));
-        time_tv.setText("Time:");
+        time_tv.setText(R.string.time);
 
 
         EditText time = new EditText(this);
-        time.setLayoutParams(new LinearLayout.LayoutParams(0, dpToPx(36), 1f));
+        time.setLayoutParams(new LinearLayout.LayoutParams(0, dpToPx(this, 36), 1f));
         time.setHint("Times");
         time.setText("1-2''");
         time.setTextSize(15);
@@ -198,7 +197,7 @@ public class AddExercises extends AppCompatActivity implements View.OnClickListe
         form.addView(ll_times);
 
         RadioGroup radioDays = new RadioGroup(this);
-        radioDays.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, dpToPx(40)));
+        radioDays.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, dpToPx(this, 40)));
         radioDays.setOrientation(LinearLayout.HORIZONTAL);
         radioDays.setGravity(Gravity.CENTER);
 
@@ -215,19 +214,15 @@ public class AddExercises extends AppCompatActivity implements View.OnClickListe
         form.addView(radioDays);
 
         EditText notes = new EditText(this);
-        notes.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, dpToPx(36)));
+        notes.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, dpToPx(this, 36)));
         notes.setHint("Notes");
         notes.setText("D");
         notes.setTextSize(15);
         form.addView(notes);
 
         parent.addView(form);
-        return new Exercise(name_ex, list_cycles, radioDays, notes, time);
+        return new Exercise(name_ex, list_cycles, radioDays, time, notes);
     }
 
-    public int dpToPx(int dp) {
-        DisplayMetrics displayMetrics = this.getResources().getDisplayMetrics();
-        return Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
-    }
 
 }
