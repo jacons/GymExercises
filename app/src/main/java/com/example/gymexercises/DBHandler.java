@@ -115,8 +115,8 @@ public class DBHandler extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getReadableDatabase();
 
-        String id_program = "", name = "", date = "", time, notes, reps, load;
-        int day, series, id_exercise;
+        String id_program = "", name = "", date = "", time, notes, series, reps, load;
+        int day, id_exercise;
 
         String sql_query = "SELECT id_program,name,date FROM workouts ORDER BY id_program DESC LIMIT 1";
         try (Cursor c = db.rawQuery(sql_query, null)) {
@@ -128,13 +128,13 @@ public class DBHandler extends SQLiteOpenHelper {
 
             } while (c.moveToNext());
         } catch (Exception e) {
+            System.out.println("Errore " + e.getMessage());
             return null;
         }
 
-        Workout<wrapper_exercise> workout = new Workout<>(name);
-        workout.addDate(date);
+        Workout<wrapper_exercise> workout = new Workout<>(name, date);
 
-        sql_query = "SELECT name,day,time,notes FROM exercises WHERE id_program == ? ORDER BY id_exercise ASC";
+        sql_query = "SELECT name, day, time, notes FROM exercises WHERE id_program == ? ORDER BY id_exercise ASC";
         try (Cursor c = db.rawQuery(sql_query, new String[]{id_program})) {
 
             if (c.moveToFirst()) do {
@@ -143,11 +143,11 @@ public class DBHandler extends SQLiteOpenHelper {
                 day = c.getInt(1);
                 time = c.getString(2);
                 notes = c.getString(3);
-
                 workout.add(new wrapper_exercise(name, notes, day, time));
 
             } while (c.moveToNext());
         } catch (Exception e) {
+            System.out.println("Errore " + e.getMessage());
             return null;
         }
 
@@ -158,7 +158,7 @@ public class DBHandler extends SQLiteOpenHelper {
             if (c.moveToFirst()) do {
 
                 id_exercise = c.getInt(0);
-                series = c.getInt(1);
+                series = c.getString(1);
                 reps = c.getString(2);
                 load = c.getString(3);
 
@@ -166,9 +166,9 @@ public class DBHandler extends SQLiteOpenHelper {
 
             } while (c.moveToNext());
         } catch (Exception e) {
+            System.out.println("Errore " + e.getMessage());
             return null;
         }
-
 
         db.close();
         return workout;

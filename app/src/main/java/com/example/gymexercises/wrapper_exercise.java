@@ -21,8 +21,8 @@ public class wrapper_exercise {
         this.m_cycle = new ArrayList<>();
     }
 
-    public void add_cycle(int series, String reps, String load) {
-        m_cycle.add(new String[]{String.valueOf(series), reps, load});
+    public void add_cycle(String series, String reps, String load) {
+        m_cycle.add(new String[]{series, reps, load});
     }
 
     public String getName() {
@@ -37,6 +37,10 @@ public class wrapper_exercise {
         return id2day.get(this.day);
     }
 
+    public String getTime() {
+        return this.time;
+    }
+
     public String getSeries(int idx) {
         return m_cycle.get(idx)[0];
     }
@@ -49,7 +53,7 @@ public class wrapper_exercise {
         return m_cycle.get(idx)[2];
     }
 
-    public String getTime() {
-        return this.time;
+    public int getNCycle() {
+        return m_cycle.size();
     }
 }

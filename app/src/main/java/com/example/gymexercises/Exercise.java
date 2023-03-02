@@ -9,14 +9,14 @@ import java.util.ArrayList;
 
 public class Exercise {
 
-    private final EditText name_ex, notes, time;
-    private final ArrayList<EditText[]> list_m_cycles;
+    private final EditText name, notes, time;
+    private final ArrayList<EditText[]> m_cycles;
     private final RadioGroup radioDays;
     private ArrayList<String[]> cache = null;
 
-    public Exercise(EditText name_ex, ArrayList<EditText[]> list_m_cycles, RadioGroup radioDays, EditText time, EditText notes) {
-        this.name_ex = name_ex;
-        this.list_m_cycles = list_m_cycles;
+    public Exercise(EditText name, ArrayList<EditText[]> m_cycles, RadioGroup radioDays, EditText time, EditText notes) {
+        this.name = name;
+        this.m_cycles = m_cycles;
         this.radioDays = radioDays;
         this.notes = notes;
         this.time = time;
@@ -26,8 +26,8 @@ public class Exercise {
 
         if (this.cache == null) {
 
-            ArrayList<String[]> result = new ArrayList<>(this.list_m_cycles.size());
-            for (EditText[] cycle : this.list_m_cycles) {
+            ArrayList<String[]> result = new ArrayList<>(this.m_cycles.size());
+            for (EditText[] cycle : this.m_cycles) {
                 result.add(new String[]{
                         cycle[0].getText().toString().trim(),
                         cycle[1].getText().toString().trim()
@@ -40,7 +40,7 @@ public class Exercise {
     }
 
     public String getName() {
-        return name_ex.getText().toString().trim();
+        return name.getText().toString().trim();
     }
 
     public String getNotes() {

@@ -24,14 +24,14 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     private final ArrayList<wrapper_exercise> list_exercises;
     private final int m_cycle;
 
-    public Adapter(Context c, ArrayList<wrapper_exercise> list_exercises, int m_cycle) {
+    public Adapter(Context context, ArrayList<wrapper_exercise> list_exercises, int m_cycle) {
 
-        this.context = c;
+        this.context = context;
         this.list_exercises = list_exercises;
         this.m_cycle = m_cycle;
     }
 
-    public static TextView[] add_cycle(Context c, LinearLayout parser) {
+    public MCycle add_cycle(Context c, int count, LinearLayout parser) {
 
         LinearLayout ll_cycle = new LinearLayout(c);
         ll_cycle.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT));
@@ -39,7 +39,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
         TextView num_week = new TextView(c);
         num_week.setLayoutParams(new LinearLayout.LayoutParams(0, WRAP_CONTENT, 1f));
-        num_week.setText(R.string.week);
+        num_week.setText("Week " + (count + 1));
         num_week.setTextSize(15);
         num_week.setTextColor(Color.BLACK);
         num_week.setGravity(Gravity.CENTER);
@@ -81,7 +81,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         ll_cycle.addView(load_value);
 
         parser.addView(ll_cycle);
-        return new TextView[]{series_value, reps_value, load_value};
+        return new MCycle(series_value, reps_value, load_value);
     }
 
     @NonNull
@@ -101,35 +101,47 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
         wrapper_exercise wrapper = list_exercises.get(position);
 
-        holder.name_ex.setText(wrapper.getName());
+        holder.name.setText(wrapper.getName());
         holder.notes.setText(wrapper.getNotes());
         holder.day.setText(wrapper.getDay());
         holder.time.setText(wrapper.getTime());
 
         int idx = 0;
-        for (TextView[] cycle : holder.list_m_cycle) {
-            cycle[0].setText(wrapper.getSeries(idx));
-            cycle[1].setText(wrapper.getReps(idx));
-            cycle[2].setText(wrapper.getLoad(idx));
+        for (MCycle c : holder.list_m_cycle) {
+            c.series.setText(wrapper.getSeries(idx));
+            c.reps.setText(wrapper.getReps(idx));
+            c.load.setText(wrapper.getLoad(idx));
+            idx++;
+        }
+    }
+
+    public static class MCycle {
+        public final TextView series, reps;
+        public final EditText load;
+
+        public MCycle(TextView series, TextView reps, EditText load) {
+            this.series = series;
+            this.reps = reps;
+            this.load = load;
         }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView name_ex, notes, day, time;
-        ArrayList<TextView[]> list_m_cycle;
+        TextView name, notes, day, time;
+        MCycle[] list_m_cycle;
 
         public ViewHolder(@NonNull View itemView, int m_cycle) {
 
             super(itemView);
-            list_m_cycle = new ArrayList<>(m_cycle);
+            list_m_cycle = new MCycle[m_cycle];
 
-            name_ex = itemView.findViewById(R.id.card_name_ex);
+            name = itemView.findViewById(R.id.card_name_ex);
             notes = itemView.findViewById(R.id.card_notes);
             day = itemView.findViewById(R.id.card_day_of_week);
             time = itemView.findViewById(R.id.card_recovery_time);
 
             LinearLayout ll_m_cycles = itemView.findViewById(R.id.card_micro_cycles);
-            for (int i = 0; i < m_cycle; i++) list_m_cycle.add(add_cycle(context, ll_m_cycles));
+            for (int i = 0; i < m_cycle; i++) list_m_cycle[i] = add_cycle(context, i, ll_m_cycles);
         }
     }
 }

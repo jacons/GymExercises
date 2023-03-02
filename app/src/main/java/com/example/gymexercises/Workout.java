@@ -13,8 +13,10 @@ public class Workout<T> {
         this.exercises = new ArrayList<>();
     }
 
-    public void addDate(String date) {
+    public Workout(String name, String date) {
+        this.name = name;
         this.date = date;
+        this.exercises = new ArrayList<>();
     }
 
     public void add(T e) {
