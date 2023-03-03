@@ -4,6 +4,7 @@ import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteException;
 import android.graphics.Color;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,18 +22,23 @@ import java.util.ArrayList;
 
 public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
-    private final Context context;
+    public final Context context;
+    public final int m_cycle; // Number of Micro-cycles
+    public final String id_program; // Unique id workout
+    public final DBHandler dbHandler;
     private final ArrayList<wrapper_exercise> list_exercises;
-    private final int m_cycle;
 
-    public Adapter(Context context, ArrayList<wrapper_exercise> list_exercises, int m_cycle) {
+    Adapter(Context context, Workout<wrapper_exercise> workout) {
 
         this.context = context;
-        this.list_exercises = list_exercises;
-        this.m_cycle = m_cycle;
+        this.list_exercises = workout.exercises;
+        this.id_program = workout.id_program;
+        this.m_cycle = workout.exercises.get(0).getNCycle();
+
+        this.dbHandler = new DBHandler(context);
     }
 
-    public MCycle add_cycle(Context c, int count, LinearLayout parser) {
+    MCycle add_cycle(Context c, int count, LinearLayout parser) {
 
         LinearLayout ll_cycle = new LinearLayout(c);
         ll_cycle.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT));
@@ -88,7 +95,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     @Override
     public Adapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(context).inflate(R.layout.card_exercise, parent, false);
-        return new ViewHolder(v, this.m_cycle);
+        return new ViewHolder(v, dbHandler, id_program, m_cycle);
     }
 
     @Override
@@ -105,6 +112,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         holder.notes.setText(wrapper.getNotes());
         holder.day.setText(wrapper.getDay());
         holder.time.setText(wrapper.getTime());
+        holder.id_exercise = String.valueOf(position);
 
         int idx = 0;
         for (MCycle c : holder.list_m_cycle) {
@@ -119,29 +127,53 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         public final TextView series, reps;
         public final EditText load;
 
-        public MCycle(TextView series, TextView reps, EditText load) {
+        MCycle(TextView series, TextView reps, EditText load) {
             this.series = series;
             this.reps = reps;
             this.load = load;
         }
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView name, notes, day, time;
-        MCycle[] list_m_cycle;
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
+        public final DBHandler dbHandler;
+        public final String id_program;
+        public String id_exercise;
+        public TextView name, notes, day, time;
+        public MCycle[] list_m_cycle;
 
-        public ViewHolder(@NonNull View itemView, int m_cycle) {
+        public ViewHolder(@NonNull View itemView, DBHandler dbHandler, String id_program, int m_cycle) {
 
             super(itemView);
-            list_m_cycle = new MCycle[m_cycle];
+            this.dbHandler = dbHandler;
+            this.id_program = id_program;
+
 
             name = itemView.findViewById(R.id.card_name_ex);
+            name.setOnLongClickListener(this);
             notes = itemView.findViewById(R.id.card_notes);
             day = itemView.findViewById(R.id.card_day_of_week);
             time = itemView.findViewById(R.id.card_recovery_time);
 
             LinearLayout ll_m_cycles = itemView.findViewById(R.id.card_micro_cycles);
+            list_m_cycle = new MCycle[m_cycle];
             for (int i = 0; i < m_cycle; i++) list_m_cycle[i] = add_cycle(context, i, ll_m_cycles);
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+
+            if (view.getId() == name.getId()) {
+                try {
+                    this.dbHandler.update_Mcycles(id_program, id_exercise, list_m_cycle);
+
+                } catch (SQLiteException e) {
+                    Toast.makeText(context, "Error during the updating! " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    return false;
+                }
+                Toast.makeText(context, "Information saved", Toast.LENGTH_LONG).show();
+                return true;
+            }
+            return false;
         }
     }
 }

@@ -4,17 +4,15 @@ package com.example.gymexercises;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 
-import java.util.ArrayList;
-
 
 public class Exercise {
 
     private final EditText name, notes, time;
-    private final ArrayList<EditText[]> m_cycles;
+    private final EditText[][] m_cycles;
     private final RadioGroup radioDays;
-    private ArrayList<String[]> cache = null;
+    private String[][] cache = null;
 
-    public Exercise(EditText name, ArrayList<EditText[]> m_cycles, RadioGroup radioDays, EditText time, EditText notes) {
+    public Exercise(EditText name, EditText[][] m_cycles, RadioGroup radioDays, EditText time, EditText notes) {
         this.name = name;
         this.m_cycles = m_cycles;
         this.radioDays = radioDays;
@@ -22,17 +20,19 @@ public class Exercise {
         this.time = time;
     }
 
-    public ArrayList<String[]> getMCycles() {
+    public String[][] getMCycles() {
 
         if (this.cache == null) {
 
-            ArrayList<String[]> result = new ArrayList<>(this.m_cycles.size());
-            for (EditText[] cycle : this.m_cycles) {
-                result.add(new String[]{
+            String[][] result = new String[this.m_cycles.length][];
+
+            int i = 0;
+            for (EditText[] cycle : this.m_cycles)
+                result[i++] = new String[]{
                         cycle[0].getText().toString().trim(),
                         cycle[1].getText().toString().trim()
-                });
-            }
+                };
+
             this.cache = result;
         }
 

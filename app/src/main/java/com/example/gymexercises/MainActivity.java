@@ -18,37 +18,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         Workout<wrapper_exercise> workout;
         try (DBHandler dbHandler = new DBHandler(this)) {
 
             workout = dbHandler.get_last_workout();
 
         } catch (Exception e) {
-            System.out.println("Errore " + e.getMessage());
+            System.out.println("Error " + e.getMessage());
             return;
         }
 
-        /*
-        for(wrapper_exercise w: workout.exercises){
-            System.out.println(w.getName());
-            System.out.println(w.getSeries(0));
-            System.out.println(w.getReps(0));
-            System.out.println(w.getLoad(0));
-
-            System.out.println(w.getSeries(1));
-            System.out.println(w.getReps(1));
-            System.out.println(w.getLoad(1));
-
-            System.out.println(w.getSeries(1));
-            System.out.println(w.getReps(1));
-            System.out.println(w.getLoad(1));
-        }
-
-         */
-
-        Adapter adapter = new Adapter(this, workout.exercises,
-                workout.exercises.get(0).getNCycle());
+        Adapter adapter = new Adapter(this, workout);
 
         RecyclerView rv = findViewById(R.id.recyclerview);
         rv.setAdapter(adapter);
