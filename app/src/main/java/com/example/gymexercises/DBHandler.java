@@ -12,7 +12,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     // Creating a constructor for our database handler.
     public DBHandler(Context context) {
-        super(context, "gymexercises_db", null, Integer.parseInt("1"));
+        super(context, "gymexercises_db", null, Integer.parseInt("4"));
     }
 
     @Override
@@ -29,6 +29,7 @@ public class DBHandler extends SQLiteOpenHelper {
         String exercises = " CREATE TABLE exercises (" +
                 "id_program INTEGER," +
                 "id_exercise INTEGER," +
+                "ordering INTEGER," +               // Ordering
                 "name VARCHAR(100) NOT NULL ," +    // Name of exercise
                 "day INTEGER NOT NULL," +           // Day 1-6 Lun-Sat
                 "time TEXT NOT NULL ," +            // Time among the series
@@ -98,6 +99,7 @@ public class DBHandler extends SQLiteOpenHelper {
             values.clear();
             values.put("id_program", id_workout);
             values.put("id_exercise", id_exercise);
+            values.put("ordering", id_exercise);
             values.put("name", e.getName());
             values.put("day", e.getDay());
             values.put("time", e.getTime());

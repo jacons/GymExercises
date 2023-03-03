@@ -15,4 +15,7 @@
     <string name="series">Series</string>
     <string name="reps">Reps</string>
     <string name="update_cards">Update cards</string>
+    <string name="edit_last_workout">Edit last Workout</string>
+    <string name="history">History</string>
+    <string name="clear_all_data">Clear all data</string>
 </resources>

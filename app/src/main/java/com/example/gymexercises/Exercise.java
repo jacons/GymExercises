@@ -30,8 +30,7 @@ public class Exercise {
             for (EditText[] cycle : this.m_cycles)
                 result[i++] = new String[]{
                         cycle[0].getText().toString().trim(),
-                        cycle[1].getText().toString().trim()
-                };
+                        cycle[1].getText().toString().trim()};
 
             this.cache = result;
         }
@@ -47,8 +46,8 @@ public class Exercise {
         return notes.getText().toString().trim();
     }
 
-    public int getDay() {
-        return radioDays.getCheckedRadioButtonId();
+    public String getDay() {
+        return String.valueOf(radioDays.getCheckedRadioButtonId());
     }
 
     public String getTime() {

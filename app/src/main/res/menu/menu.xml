@@ -3,4 +3,13 @@
     <item
         android:id="@+id/add"
         android:title="@string/add_workout" />
+    <item
+        android:id="@+id/edit"
+        android:title="@string/edit_last_workout" />
+    <item
+        android:id="@+id/hist"
+        android:title="@string/history" />
+    <item
+        android:id="@+id/clear"
+        android:title="@string/clear_all_data" />
 </menu>

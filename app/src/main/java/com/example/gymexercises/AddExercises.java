@@ -63,7 +63,7 @@ public class AddExercises extends AppCompatActivity implements View.OnClickListe
 
     public void save_workout() {
 
-        String workout_name, name, day;
+        String workout_name;
 
         // Retrieve a workout_name
         workout_name = ((EditText) findViewById(R.id.workout_name)).getText().toString().trim();
@@ -85,18 +85,16 @@ public class AddExercises extends AppCompatActivity implements View.OnClickListe
         // We retrieve the fields and check if they are null
         for (Exercise w : this.exercises) {
 
-            name = w.getName();
-            day = String.valueOf(w.getDay());
+            if (w.getName().equals("") | w.getDay().equals("")) {
+                Toast.makeText(getApplicationContext(), "You must complete all information! (Exercise)", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
             for (String[] cycle : w.getMCycles()) {
                 if (cycle[0].equals("") | cycle[1].equals("")) {
                     Toast.makeText(getApplicationContext(), "You must complete all information! (Micro-cycles)", Toast.LENGTH_SHORT).show();
                     return;
                 }
-            }
-            if (name.equals("") | day.equals("")) {
-                Toast.makeText(getApplicationContext(), "You must complete all information! (Exercise)", Toast.LENGTH_SHORT).show();
-                return;
             }
             workout.add(w);
         }
@@ -135,6 +133,7 @@ public class AddExercises extends AppCompatActivity implements View.OnClickListe
         name_ex.setTextSize(15);
         form.addView(name_ex);
 
+
         TextView cycles = new TextView(this);
         cycles.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT));
         cycles.setText(R.string.micro_cycles_weeks);
@@ -161,12 +160,14 @@ public class AddExercises extends AppCompatActivity implements View.OnClickListe
             series.setHint("Series");
             series.setTextSize(15);
             series.setGravity(Gravity.CENTER);
+            series.setText("2");
 
             EditText reps = new EditText(this);
             reps.setLayoutParams(new LinearLayout.LayoutParams(0, dpToPx(this, 36), 1f));
             reps.setHint("Reps");
             reps.setTextSize(15);
             reps.setGravity(Gravity.CENTER);
+            reps.setText("10");
 
             ll_SeriesReps.addView(num);
             ll_SeriesReps.addView(series);

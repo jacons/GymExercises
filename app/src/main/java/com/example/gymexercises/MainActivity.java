@@ -48,6 +48,10 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(MainActivity.this, AddExercises.class));
             return true;
         }
+        if (item.getItemId() == R.id.edit) {
+            startActivity(new Intent(MainActivity.this, EditWorkout.class));
+            return true;
+        }
         return false;
     }
 }
